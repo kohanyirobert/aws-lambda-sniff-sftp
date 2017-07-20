@@ -1,0 +1,24 @@
+= About
+
+AWS Lambda function that listen for S3 file uploads made by `aws-lambda-sniff`.
+When triggered it copies the audio file over SSH to its destination configured by environment variables.
+Audio files are placed in `$SSH_DIR/<artist>/<filename>`.
+
+== Version
+
+include::VERSION[]
+
+== Dependencies
+
+* `python 2.x`
+* `paramiko` (doesn't work with `python-3.x`)
+* `tagit` (basics `taglib` based tagger)
+
+== Environment Variables
+
+* `WORK_DIR` - the directory path to download temporary files, etc. (e.g. `/tmp`).
+* `SSH_PRIVATE_KEY` - an SSH private key file as a string.
+* `SSH_USERNAME`
+* `SSH_HOST`
+* `SSH_PORT`
+* `SSH_DIR` - the base directory on the remote host.
