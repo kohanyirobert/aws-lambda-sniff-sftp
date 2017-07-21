@@ -22,3 +22,4 @@ include::VERSION[]
 * `SSH_HOST`
 * `SSH_PORT`
 * `SSH_DIR` - the base directory on the remote host.
+* `SSH_COMMAND` - a command that executed over SSH, e.g `nohup bash script.sh '{}' &> out.log &`, where `{}` is place holder which will receive the audio file's name (without extensions).

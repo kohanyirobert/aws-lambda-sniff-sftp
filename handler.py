@@ -60,6 +60,14 @@ def ssh_copy(ssh, ssh_dir, key, audiopath):
     sftp.put(audiopath, remotepath)
 
 
+def ssh_post_exec(ssh, ssh_command, audiopath):
+    title = check_output(['tagit', 'g', 'TITLE', audiopath]).strip()
+    stdin, stdout, stderr = ssh.exec_command(ssh_command.format(title))
+    stdin.close()
+    stdout.close()
+    stderr.close()
+
+
 def get_remotepath(ssh_dir, key, audiopath):
     artist = check_output(['tagit', 'g', 'ARTIST', audiopath]).strip()
     remotepath = posixpath.join(ssh_dir, artist, key)
@@ -74,6 +82,7 @@ def handler(event, context):
     ssh_host = os.environ['SSH_HOST']
     ssh_port = int(os.environ.get('SSH_PORT'))
     ssh_dir = os.environ['SSH_DIR']
+    ssh_command = os.environ.get('SSH_COMMAND')
 
     bucket, key = get_bucket_and_key(event)
     audiopath = get_audiopath(work_dir, key)
@@ -81,5 +90,7 @@ def handler(event, context):
 
     ssh = ssh_connect(ssh_private_key, ssh_username, ssh_host, ssh_port)
     ssh_copy(ssh, ssh_dir, key, audiopath)
+    if ssh_command:
+        ssh_post_exec(ssh, ssh_command, audiopath)
 
     return None
