@@ -83,6 +83,7 @@ def ssh_post_exec(ssh, ssh_command, audiopath):
 
 def get_remotepath(ssh_dir, key, audiopath):
     artist = check_output(['tagit', 'g', 'ARTIST', audiopath]).strip()
+    print('artist', artist)
     remotepath = posixpath.join(ssh_dir, artist, key)
     print('remotepath', remotepath)
     return remotepath
