@@ -1,4 +1,5 @@
-import logging
+import sys
+import locale
 import os
 import posixpath
 import io
@@ -7,6 +8,10 @@ import paramiko
 from tempfile import mkdtemp
 from urllib import unquote_plus
 from subprocess import check_call, check_output
+
+print('defaultencoding', sys.getdefaultencoding())
+print('filesystemencoding', sys.getfilesystemencoding())
+print('preferredencoding', locale.getpreferredencoding())
 
 os.environ['PATH'] += os.pathsep + os.getcwd()
 
@@ -20,9 +25,7 @@ def format_private_key(s):
 def get_bucket_and_key(event):
     '''https://stackoverflow.com/a/39465221/433835'''
     bucket = event['Records'][0]['s3']['bucket']['name']
-    utf8_urlencoded_key = event['Records'][0]['s3']['object']['key']
-    key_utf8 = unquote_plus(utf8_urlencoded_key)
-    key = key_utf8.decode('utf-8')
+    key = unquote_plus(event['Records'][0]['s3']['object']['key'])
     print('bucket', bucket)
     print('key', key)
     return (bucket, key)
