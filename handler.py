@@ -25,8 +25,14 @@ def format_private_key(s):
 def get_bucket_and_key(event):
     '''https://stackoverflow.com/a/39465221/433835'''
     bucket = event['Records'][0]['s3']['bucket']['name']
-    key = unquote_plus(event['Records'][0]['s3']['object']['key'])
+    urlencoded_key = event['Records'][0]['s3']['object']['key']
+    utf8_urlencoded_key = urlencoded_key.encode('utf-8')
+    utf8_key = unquote_plus(utf8_urlencoded_key)
+    key = utf8_key.decode('utf-8')
     print('bucket', bucket)
+    print('urlencoded_key', urlencoded_key)
+    print('utf8_urlencoded_key', utf8_urlencoded_key)
+    print('utf8_key', utf8_key)
     print('key', key)
     return (bucket, key)
 
