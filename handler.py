@@ -53,7 +53,8 @@ def ssh_connect(ssh_private_key, ssh_username, ssh_host, ssh_port):
 
 def ssh_copy(ssh, ssh_dir, key, audiopath):
     remotepath = get_remotepath(ssh_dir, key, audiopath)
-    _, stdout, stderr = ssh.exec_command('mkdir -vp {}'.format(posixpath.dirname(remotepath)))
+    # TODO Externalize like ssh_post_exec
+    _, stdout, stderr = ssh.exec_command("mkdir -vp '{}'".format(posixpath.dirname(remotepath)))
     print('stdout', stdout.read())
     print('stderr', stderr.read())
     sftp = ssh.open_sftp()
