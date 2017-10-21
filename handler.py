@@ -5,6 +5,7 @@ import posixpath
 import io
 import boto3
 import paramiko
+import pipes
 from tempfile import mkdtemp
 from urllib import unquote_plus
 from subprocess import check_call, check_output
@@ -66,7 +67,9 @@ def ssh_connect(ssh_private_key, ssh_username, ssh_host, ssh_port):
 def ssh_copy(ssh, ssh_dir, key, audiopath):
     remotepath = get_remotepath(ssh_dir, key, audiopath)
     # TODO Externalize like ssh_post_exec
-    _, stdout, stderr = ssh.exec_command("mkdir -vp '{}'".format(posixpath.dirname(remotepath)))
+    cmd = "mkdir -vp {}".format(pipes.quote(posixpath.dirname(remotepath)))
+    print('cmd', cmd)
+    _, stdout, stderr = ssh.exec_command(cmd)
     print('stdout', stdout.read())
     print('stderr', stderr.read())
     sftp = ssh.open_sftp()
